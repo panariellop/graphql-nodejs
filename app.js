@@ -8,18 +8,35 @@ const { buildSchema } = require('graphql')
 
 const app = express() 
 
+const events = []; 
+
 app.use(bodyParser.json())
 
 // using the #graphql tag allows syntax highlghting in VS code 
 // # makes comments in graphql 
 app.use("/graphql", graphqlHTTP({
     schema: buildSchema(`#graphql
+        type Event { 
+            _id: ID! 
+            title: String! 
+            description: String! 
+            price: Float! 
+            date: String! 
+        }
+
+        input EventInput { 
+            title: String! 
+            description: String! 
+            price: Float! 
+            date: String! 
+        }
+
         type RootQuery { 
-            events: [String!]!
+            events: [Event!]!
         }
 
         type RootMutation {
-            createEvent(name: String): String
+            createEvent(input: EventInput): Event
         }
 
         schema {
@@ -29,11 +46,18 @@ app.use("/graphql", graphqlHTTP({
     `), // graph ql schema 
     rootValue: {
         events: () => {
-            return ['Romantic Cooking', 'Sailing', ]
+            return events 
         }, 
         createEvent: ( args ) => {
-            const eventName = args.name; 
-            return eventName;  
+            const event = {
+                _id: Math.random.toString(), 
+                title: args.input.title, 
+                description: args.input.description, 
+                price: args.input.price, 
+                date: args.input.date, 
+            }
+            events.push(event); 
+            return event; 
         }
     }, // points to our resolvers - must match the schema 
     graphiql: true // will get a graphical interface to interface with the code 
