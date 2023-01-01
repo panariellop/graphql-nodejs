@@ -6,7 +6,6 @@ const types = `#graphql
         price: Float! 
         date: String! 
     }
-
     input EventInput { 
         title: String! 
         description: String! 

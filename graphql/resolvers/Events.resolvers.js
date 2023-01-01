@@ -1,11 +1,9 @@
+let events = []; 
 
-const queries = {
+const resolvers = {
     events: () => {
-        return events 
-    }
-} 
-
-const mutations = {
+        return events
+    }, 
     createEvent: ( args ) => {
         const event = {
             _id: Math.random.toString(), 
@@ -19,4 +17,4 @@ const mutations = {
     }
 }
 
-module.exports = [queries, mutations]
+module.exports = resolvers 
